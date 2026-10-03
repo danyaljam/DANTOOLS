@@ -1,0 +1,21 @@
+class Dtools < Formula
+  desc "Private local web utilities"
+  homepage "https://github.com/danyaljam/DANTOOLS"
+  url "https://github.com/danyaljam/DANTOOLS/releases/download/v__VERSION__/dtools-__VERSION__.zip"
+  sha256 "__SHA256__"
+  version "__VERSION__"
+
+  depends_on "node"
+
+  def install
+    libexec.install "dtools/out", "dtools/scripts"
+    (bin/"dtools").write <<~SH
+      #!/bin/sh
+      exec "#{Formula["node"].opt_bin}/node" "#{libexec}/scripts/serve-local.mjs" "$@"
+    SH
+  end
+
+  test do
+    assert_predicate libexec/"out/index.html", :exist?
+  end
+end

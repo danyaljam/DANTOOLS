@@ -1,0 +1,49 @@
+name: Release local app
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.23"
+      - run: npm ci
+      - run: npm run build
+      - name: Assemble Windows app bundle
+        shell: bash
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          mkdir -p packaging/windows/bundle/out packaging/windows/bundle/scripts packaging/windows/bundle/runtime
+          cp -R out/. packaging/windows/bundle/out/
+          cp scripts/serve-local.mjs packaging/windows/bundle/scripts/
+          node_version="$(node -p "process.versions.node")"
+          curl -fsSL "https://nodejs.org/dist/v${node_version}/node-v${node_version}-win-x64.zip" -o /tmp/node-win.zip
+          unzip -q -o /tmp/node-win.zip -d /tmp/node-win
+          cp "/tmp/node-win/node-v${node_version}-win-x64/node.exe" packaging/windows/bundle/runtime/node.exe
+          GOOS=windows GOARCH=amd64 go build -ldflags "-X main.releaseVersion=${version}" -o "dtools-${version}.exe" packaging/windows/launcher.go
+          rm -rf packaging/windows/bundle
+          mkdir -p release/dtools/out release/dtools/scripts
+          cp -R out/. release/dtools/out/
+          cp scripts/serve-local.mjs release/dtools/scripts/
+          (cd release && zip -qr "../dtools-${version}.zip" dtools)
+          rm -rf release
+      - uses: softprops/action-gh-release@v2
+        with:
+          overwrite_files: true
+          fail_on_unmatched_files: true
+          files: |
+            dtools-*.exe
+            dtools-*.zip

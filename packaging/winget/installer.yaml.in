@@ -1,0 +1,23 @@
+PackageIdentifier: DanyalJam.DTools
+PackageVersion: __VERSION__
+InstallerLocale: en-US
+Platform:
+  - Windows.Desktop
+MinimumOSVersion: 10.0.0.0
+InstallerType: portable
+Scope: user
+InstallModes:
+  - interactive
+UpgradeBehavior: uninstallPrevious
+Dependencies:
+  PackageDependencies:
+    - PackageIdentifier: OpenJS.NodeJS.LTS
+      MinimumVersion: 22.13.0
+Installers:
+  - Architecture: x64
+    InstallerUrl: https://github.com/danyaljam/DANTOOLS/releases/download/v__VERSION__/dtools-__VERSION__.exe
+    InstallerSha256: __SHA256__
+    Commands:
+      - dtools
+ManifestType: installer
+ManifestVersion: 1.6.0

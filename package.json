@@ -1,0 +1,44 @@
+{
+  "name": "dtools",
+  "type": "module",
+  "version": "1.0.5",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --webpack",
+    "prebuild": "node scripts/copy-pdf-worker.mjs && node scripts/prepare-brand-assets.mjs",
+    "build": "next build --webpack",
+    "start": "next start",
+    "lint": "tsc --noEmit",
+    "local": "node scripts/serve-local.mjs",
+    "package:windows": "mkdir -p packaging/windows/bundle/out packaging/windows/bundle/scripts && cp -R out/. packaging/windows/bundle/out/ && cp scripts/serve-local.mjs packaging/windows/bundle/scripts/ && GOOS=windows GOARCH=amd64 go build -ldflags \"-X main.releaseVersion=${npm_package_version}\" -o \"dtools-${npm_package_version}.exe\" packaging/windows/launcher.go",
+    "package:mac": "bash packaging/macos/create-dmg.sh ${npm_package_version}"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "cronstrue": "^2.50.0",
+    "js-yaml": "^4.1.0",
+    "jszip": "^3.10.1",
+    "lucide-react": "^0.460.0",
+    "next": "^16.3.8",
+    "next-themes": "^0.4.6",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^6.3.289",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "react-dropzone": "^14.3.5",
+    "sonner": "^1.7.1",
+    "tailwind-merge": "^2.5.4"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^20.17.9",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "@tailwindcss/postcss": "^4.3.3",
+    "sharp": "^0.35.5",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.7.2"
+  }
+}

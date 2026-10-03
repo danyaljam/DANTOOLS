@@ -1,0 +1,26 @@
+"use client";
+
+import * as React from "react";
+import { ToolHeader } from "@/components/shared/ToolHeader";
+import { Copy, Palette } from "lucide-react";
+import { toast } from "sonner";
+
+type RGB = { r: number; g: number; b: number };
+function hexToRgb(hex: string): RGB | null { const match = hex.replace('#', '').match(/^[0-9a-f]{6}$/i); if (!match) return null; const value = parseInt(match[0], 16); return { r: value >> 16, g: (value >> 8) & 255, b: value & 255 }; }
+function rgbToHsl({ r, g, b }: RGB) { const red = r / 255, green = g / 255, blue = b / 255, max = Math.max(red, green, blue), min = Math.min(red, green, blue); let h = 0, s = 0; const l = (max + min) / 2; if (max !== min) { const delta = max - min; s = l > 0.5 ? delta / (2 - max - min) : delta / (max + min); if (max === red) h = (green - blue) / delta + (green < blue ? 6 : 0); else if (max === green) h = (blue - red) / delta + 2; else h = (red - green) / delta + 4; h /= 6; } return `${Math.round(h * 360)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%`; }
+function rgbToHex({ r, g, b }: RGB) { return `#${[r, g, b].map((value) => value.toString(16).padStart(2, '0')).join('')}`; }
+
+export function ColorConverter() {
+  const [hex, setHex] = React.useState('#2563eb');
+  const [background, setBackground] = React.useState('#ffffff');
+  const rgb = hexToRgb(hex);
+  const hsl = rgb ? rgbToHsl(rgb) : '';
+  const copy = async (value: string) => { await navigator.clipboard.writeText(value); toast.success('Color value copied.'); };
+  const updateRgb = (key: keyof RGB, value: string) => { if (!rgb) return; const next = { ...rgb, [key]: Math.max(0, Math.min(255, Number(value) || 0)) }; setHex(rgbToHex(next)); };
+
+  const backgroundRgb = hexToRgb(background);
+  const contrast = rgb && backgroundRgb ? contrastRatio(rgb, backgroundRgb) : null;
+  return <div className="p-4 sm:p-6 lg:p-8 max-w-3xl mx-auto w-full"><ToolHeader category="Developer & Data" title="Color Converter" description="Convert HEX colors to RGB, HSL, and CSS values with live foreground, background, and contrast previews." onReset={() => { setHex('#2563eb'); setBackground('#ffffff'); }} /><div className="p-6 rounded-2xl border border-border bg-card space-y-6"><div className="grid grid-cols-1 sm:grid-cols-2 gap-3"><div className="h-32 rounded-2xl border border-border p-4 flex items-end" style={{ backgroundColor: rgb ? hex : 'transparent' }}><span className="text-sm font-bold" style={{ color: backgroundRgb ? background : '#fff' }}>Foreground preview</span></div><div className="h-32 rounded-2xl border border-border p-4 flex items-end" style={{ backgroundColor: backgroundRgb ? background : 'transparent' }}><span className="text-sm font-bold" style={{ color: rgb ? hex : '#000' }}>Text on background</span></div></div><div className="grid grid-cols-1 sm:grid-cols-4 gap-3"><label className="text-xs font-semibold">HEX<input value={hex} onChange={(event) => setHex(event.target.value)} className="mt-1 w-full px-3 py-2 rounded-xl border border-border bg-background font-mono text-sm" /></label>{(['r', 'g', 'b'] as const).map((key) => <label key={key} className="text-xs font-semibold uppercase">{key}<input type="number" min="0" max="255" value={rgb?.[key] ?? ''} onChange={(event) => updateRgb(key, event.target.value)} className="mt-1 w-full px-3 py-2 rounded-xl border border-border bg-background font-mono text-sm" /></label>)}</div><label className="text-xs font-semibold block">Preview background<input value={background} onChange={(event) => setBackground(event.target.value)} className="mt-1 w-full px-3 py-2 rounded-xl border border-border bg-background font-mono text-sm" /></label>{rgb ? <div className="space-y-2 text-xs"><Value label="HEX" value={hex.toLowerCase()} onCopy={copy} /><Value label="RGB" value={`rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`} onCopy={copy} /><Value label="HSL" value={`hsl(${hsl})`} onCopy={copy} />{contrast !== null && <div className="p-3 rounded-xl bg-muted/50 border border-border font-semibold">Contrast: {contrast.toFixed(2)}:1 · {contrast >= 4.5 ? 'WCAG AA pass' : 'Increase contrast'}</div>}<Value label="CSS variable" value={`--color-brand: ${hex.toLowerCase()};`} onCopy={copy} /></div> : <p className="text-xs text-destructive">Enter a valid six-digit HEX color.</p>}<div className="flex items-center gap-2 text-xs text-muted-foreground"><Palette className="w-4 h-4 text-primary" />Use the two previews to check readable text contrast before shipping a color.</div></div></div>;
+}
+function contrastRatio(first: RGB, second: RGB) { const luminance = (color: RGB) => { const channels = [color.r, color.g, color.b].map((value) => value / 255).map((value) => value <= 0.03928 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4)); return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2]; }; const a = luminance(first), b = luminance(second); return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05); }
+function Value({ label, value, onCopy }: { label: string; value: string; onCopy: (value: string) => void }) { return <div className="flex items-center gap-3"><span className="w-24 text-muted-foreground">{label}</span><code className="flex-1 font-mono">{value}</code><button onClick={() => onCopy(value)} className="p-1.5 rounded-md hover:bg-muted" title={`Copy ${label}`}><Copy className="w-3.5 h-3.5" /></button></div>; }

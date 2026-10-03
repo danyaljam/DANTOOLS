@@ -1,0 +1,16 @@
+node_modules/
+.npm-cache/
+.next/
+out/
+public/pdf.worker.min.js
+public/pdf.worker.min.mjs
+packaging/windows/bundle/
+.DS_Store
+*.log
+.env*
+!.env.example
+*.tsbuildinfo
+*.dmg
+*.exe
+*.zip
+*.sha256
