@@ -2,7 +2,7 @@
 
 Private PDF, image, and document utilities that run locally in your browser. Files and inputs are not sent to a processing service.
 
-Hosted web app: [https://dantools.vercel.app](https://dantools.vercel.app)
+Hosted web app: [https://danlabs.online](https://danlabs.online)
 
 ## One-command install
 
