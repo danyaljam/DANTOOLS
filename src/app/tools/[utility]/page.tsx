@@ -16,7 +16,7 @@ const EXPLICIT_TOOL_IDS = new Set([
   "word-to-pdf", "pdf-to-word", "powerpoint-to-pdf", "pdf-to-powerpoint",
   "excel-to-pdf", "pdf-to-excel", "html-to-pdf", "pdf-to-pdfa",
   "pdf-unlock", "pdf-protect", "pdf-sign", "pdf-redact",
-  "pdf-summarizer", "pdf-translate",
+  "pdf-summarizer", "pdf-translate", "pdf-analyzer",
 ]);
 const UTILITY_TOOLS = TOOLS.filter((tool) => UTILITY_CATEGORIES.has(tool.category) && !EXPLICIT_TOOL_IDS.has(tool.id));
 

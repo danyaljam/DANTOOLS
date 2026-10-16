@@ -313,6 +313,21 @@ export function PdfSummarizer() {
         </span>
       </div>
 
+      <div className="flex items-center justify-between p-3 bg-violet-500/10 border border-violet-500/20 text-violet-700 dark:text-violet-300 rounded-xl text-xs sm:text-sm">
+        <div className="flex items-center gap-2">
+          <Sparkles className="w-4 h-4 text-violet-500 shrink-0" />
+          <span>
+            <strong>New Feature:</strong> Need interactive study flashcards, self-grading quizzes, and an ephemeral PDF chatbot?
+          </span>
+        </div>
+        <a
+          href="/tools/pdf-analyzer"
+          className="flex items-center gap-1 font-semibold text-violet-600 dark:text-violet-400 hover:underline shrink-0 ml-2"
+        >
+          Open PDF Analyzer &rarr;
+        </a>
+      </div>
+
       {!file ? (
         <FileDropzone
           onFilesSelected={(files) => {

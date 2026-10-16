@@ -1,7 +1,7 @@
 {
   "name": "dtools",
   "type": "module",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "private": true,
   "scripts": {
     "dev": "next dev --webpack",
@@ -10,7 +10,8 @@
     "start": "next start",
     "lint": "tsc --noEmit",
     "local": "node scripts/serve-local.mjs",
-    "package:windows": "mkdir -p packaging/windows/bundle/out packaging/windows/bundle/scripts && cp -R out/. packaging/windows/bundle/out/ && cp scripts/serve-local.mjs packaging/windows/bundle/scripts/ && GOOS=windows GOARCH=amd64 go build -ldflags \"-X main.releaseVersion=${npm_package_version}\" -o \"dtools-${npm_package_version}.exe\" packaging/windows/launcher.go",
+    "update": "git pull origin main && npm ci && npm run build && npm run local",
+    "package:windows": "mkdir -p packaging/windows/bundle/out packaging/windows/bundle/scripts && rm -rf packaging/windows/bundle/out/* && cp -R out/. packaging/windows/bundle/out/ && cp scripts/serve-local.mjs packaging/windows/bundle/scripts/ && GOOS=windows GOARCH=amd64 go build -ldflags \"-H=windowsgui -X main.releaseVersion=${npm_package_version}\" -o \"dtools-${npm_package_version}.exe\" packaging/windows/launcher.go",
     "package:mac": "bash packaging/macos/create-dmg.sh ${npm_package_version}"
   },
   "dependencies": {

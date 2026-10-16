@@ -37,6 +37,38 @@ Package-manager installers:
 - macOS/Linux, available now: `brew install danyaljam/tap/dtools`
 - Windows, after [WinGet review](https://github.com/microsoft/winget-pkgs/pull/446164): `winget install --id DanyalJam.DTools --exact`
 
+## Update already installed apps
+
+To update an existing installation to the latest version:
+
+### Windows
+- **WinGet**:
+  ```powershell
+  winget upgrade --id DanyalJam.DTools --exact
+  ```
+- **PowerShell One-Liner (Direct Updater)**:
+  ```powershell
+  irm https://raw.githubusercontent.com/danyaljam/DANTOOLS/main/scripts/update-windows.ps1 | iex
+  ```
+- **Source install (PowerShell)**:
+  ```powershell
+  Set-Location dtools; git pull; npm ci; npm run build; npm run local
+  ```
+- **CLI Command in Standalone EXE**:
+  ```cmd
+  dtools.exe update
+  ```
+
+### macOS / Linux
+- **Homebrew**:
+  ```sh
+  brew upgrade dtools
+  ```
+- **Source install**:
+  ```sh
+  cd dtools && npm run update
+  ```
+
 ## One-command uninstall
 
 Stop the local server with Ctrl+C before uninstalling.

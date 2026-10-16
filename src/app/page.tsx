@@ -55,6 +55,7 @@ import {
   Unlock,
   PenTool,
   Languages,
+  Brain,
 } from "lucide-react";
 import { CATEGORIES, TOOLS, ToolCategory, ToolDefinition } from "@/lib/tools-registry";
 
@@ -105,6 +106,7 @@ const iconComponentMap: Record<string, React.ComponentType<{ className?: string 
   Languages,
   Sparkles,
   FileText,
+  Brain,
 };
 
 const categoryColorMap: Record<ToolCategory, { bg: string; text: string; border: string }> = {

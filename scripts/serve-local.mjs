@@ -3,6 +3,8 @@ import { createServer } from "node:http";
 import { extname, normalize, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { exec } from "node:child_process";
+
 const host = "127.0.0.1";
 const port = Number(process.env.PORT ?? 4173);
 const outputDirectory = resolve(
@@ -33,13 +35,34 @@ const contentSecurityPolicy = [
   "form-action 'self'",
   "img-src 'self' blob: data:",
   "object-src 'none'",
-  "script-src 'self' 'unsafe-inline'",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' wasm-unsafe-eval",
   "style-src 'self' 'unsafe-inline'",
-  "worker-src 'self' blob:",
+  "worker-src 'self' blob: data:",
 ].join("; ");
 
 if (!Number.isInteger(port) || port < 1 || port > 65535) {
   throw new Error("PORT must be a valid TCP port number.");
+}
+
+function openBrowser(targetUrl) {
+  if (process.env.OPEN_BROWSER === "false" || process.argv.includes("--no-browser")) {
+    return;
+  }
+  const platform = process.platform;
+  let command;
+  if (platform === "win32") {
+    // Attempt Edge App mode, fallback to default browser
+    command = `start "" "${targetUrl}"`;
+  } else if (platform === "darwin") {
+    command = `open "${targetUrl}"`;
+  } else {
+    command = `xdg-open "${targetUrl}"`;
+  }
+  try {
+    exec(command, () => {});
+  } catch {
+    // Ignore browser open errors
+  }
 }
 
 function findPage(pathname) {
@@ -110,6 +133,8 @@ const server = createServer((request, response) => {
 });
 
 server.listen(port, host, () => {
-  console.log(`DAN Tools is available at http://${host}:${port}`);
+  const url = `http://${host}:${port}`;
+  console.log(`DAN Tools is available at ${url}`);
   console.log("This server accepts connections from this device only.");
+  openBrowser(url);
 });

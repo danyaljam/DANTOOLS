@@ -60,6 +60,17 @@ export const CATEGORIES: { id: ToolCategory; name: string; description: string; 
 export const TOOLS: ToolDefinition[] = [
   // Module 1: PDF
   {
+    id: "pdf-analyzer",
+    title: "AI PDF Analyzer & Study Assistant",
+    description: "Instant runtime PDF summarization, interactive flashcards, quizzes, and ephemeral zero-storage chatbot.",
+    category: "pdf",
+    categoryName: "PDF Utilities",
+    icon: "Brain",
+    href: "/tools/pdf-analyzer",
+    badge: "AI New",
+    keywords: ["pdf", "ai", "analyzer", "summarize", "flashcards", "quiz", "chatbot", "chat with pdf", "study", "ephemeral", "summary"],
+  },
+  {
     id: "pdf-merge-split",
     title: "PDF Merger & Splitter",
     description: "Combine multiple PDF files or extract selective page ranges with thumbnail preview.",

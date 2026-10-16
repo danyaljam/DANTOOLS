@@ -2,12 +2,14 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Search, Files, FileDown, ChevronRight, FilePlus2, Download } from "lucide-react";
+import { Search, Files, FileDown, ChevronRight, FilePlus2, Download, Brain, RefreshCw } from "lucide-react";
 import { PrivacyBadge } from "./PrivacyNotice";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { SearchModal } from "./SearchModal";
+import { UpdateModal } from "./UpdateModal";
 
 const PDF_QUICK_LINKS = [
+  { label: "AI PDF Analyzer", href: "/tools/pdf-analyzer", icon: Brain, badge: "New" },
   { label: "Merge PDF", href: "/tools/pdf-merge-split", icon: Files },
   { label: "Split PDF", href: "/tools/pdf-merge-split", icon: FilePlus2 },
   { label: "Compress PDF", href: "/tools/pdf-compressor", icon: FileDown },
@@ -15,6 +17,7 @@ const PDF_QUICK_LINKS = [
 
 export function Navbar() {
   const [searchOpen, setSearchOpen] = React.useState(false);
+  const [updateOpen, setUpdateOpen] = React.useState(false);
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -80,6 +83,15 @@ export function Navbar() {
               Download Windows EXE
             </a>
 
+            <button
+              onClick={() => setUpdateOpen(true)}
+              className="hidden lg:inline-flex items-center gap-1.5 rounded-lg border border-border bg-muted/40 hover:bg-muted px-2.5 py-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors"
+              title="How to update installed apps"
+            >
+              <RefreshCw className="w-3.5 h-3.5 text-primary" />
+              Update App
+            </button>
+
             {/* Prominent Privacy Badge */}
             <PrivacyBadge />
 
@@ -112,6 +124,7 @@ export function Navbar() {
       </header>
 
       <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+      <UpdateModal isOpen={updateOpen} onClose={() => setUpdateOpen(false)} />
     </>
   );
 }
