@@ -30,7 +30,7 @@ const mimeTypes = {
 const contentSecurityPolicy = [
   "default-src 'self'",
   "base-uri 'self'",
-  "connect-src 'self' blob: data:",
+  "connect-src 'self' https://cdn.jsdelivr.net blob: data:",
   "font-src 'self' data:",
   "form-action 'self'",
   "img-src 'self' blob: data:",

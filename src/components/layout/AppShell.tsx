@@ -6,6 +6,11 @@ import { PrivacyNoticeBanner } from "./PrivacyNotice";
 import { Toaster } from "sonner";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
+  React.useEffect(() => {
+    if (process.env.NODE_ENV !== "production" || !("serviceWorker" in navigator)) return;
+    void navigator.serviceWorker.register("/sw.js", { scope: "/" });
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       <PrivacyNoticeBanner />

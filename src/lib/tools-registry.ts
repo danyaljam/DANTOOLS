@@ -208,14 +208,14 @@ export const TOOLS: ToolDefinition[] = [
   },
   {
     id: "pdf-ocr",
-    title: "OCR PDF",
-    description: "Recognize and extract text from scanned PDFs or images into selectable text.",
+    title: "OCR Studio",
+    description: "Batch-recognize scanned PDFs and images locally, export searchable PDFs, and work offline with English OCR.",
     category: "pdf",
     categoryName: "PDF Utilities",
     icon: "ScanText",
     href: "/tools/pdf-ocr",
     badge: "New",
-    keywords: ["pdf", "ocr", "optical character recognition", "scanned", "searchable", "text recognition"],
+    keywords: ["pdf", "image", "ocr", "optical character recognition", "scanned", "searchable", "text recognition", "offline", "batch"],
   },
   {
     id: "word-to-pdf",

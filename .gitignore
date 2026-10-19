@@ -4,6 +4,7 @@ node_modules/
 out/
 public/pdf.worker.min.js
 public/pdf.worker.min.mjs
+public/tesseract/
 packaging/windows/bundle/
 .DS_Store
 *.log
