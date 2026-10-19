@@ -4,6 +4,7 @@
   "version": "1.0.6",
   "private": true,
   "scripts": {
+    "predev": "node scripts/copy-pdf-worker.mjs",
     "dev": "next dev --webpack",
     "prebuild": "node scripts/copy-pdf-worker.mjs && node scripts/prepare-brand-assets.mjs",
     "build": "next build --webpack",

@@ -193,14 +193,31 @@ export function PdfAnalyzer() {
 
     extractedPages.forEach((p) => {
       const sList = p.text
-        .split(/(?<=[.?!])\s+/)
+        .split(/(?<=[.?!])\s+|[\r\n]+/)
         .map((s) => s.trim())
         .filter((s) => s.length > 25 && !s.startsWith("http"));
-      sList.forEach((s) => sentencesWithPage.push({ sentence: s, pageNumber: p.pageNumber }));
+
+      const fallbackChunks: string[] = [];
+      if (sList.length === 0) {
+        const words = p.text.split(/\s+/).filter(Boolean);
+        for (let index = 0; index < words.length; index += 22) {
+          const chunk = words.slice(index, index + 22).join(" ").trim();
+          if (chunk.length > 25) fallbackChunks.push(chunk);
+        }
+      }
+
+      [...sList, ...fallbackChunks].forEach((sentence) =>
+        sentencesWithPage.push({ sentence, pageNumber: p.pageNumber })
+      );
     });
 
     if (sentencesWithPage.length === 0) {
       setExecutiveSummary("No extractable text found in this PDF.");
+      setKeyTakeaways([]);
+      setActionItems([]);
+      setMetricsAndDates([]);
+      setFlashcards([]);
+      setQuizQuestions([]);
       return;
     }
 
